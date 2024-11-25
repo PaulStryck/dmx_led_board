@@ -2374,10 +2374,12 @@ static inline const struct sercomspi_regs_cfg *_spi_get_regs(const uint32_t hw_a
 	return NULL;
 }
 
+/*
 void SERCOM0_Handler(void)
 {
 	_sercom_usart_interrupt_handler(_sercom0_dev);
 }
+*/
 
 int32_t _spi_m_sync_init(struct _spi_m_sync_dev *dev, void *const hw)
 {
