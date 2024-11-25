@@ -27,10 +27,13 @@ endif
 # List the subdirectories for creating object files
 SUB_DIRS +=  \
  \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0 \
+hpl/systick \
 hpl/dmac \
 samd21c/armcc/Device/SAMD21B/Source \
 hpl/tcc \
 hal/src \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang \
 hpl/pm \
 hpl/sysctrl \
 hal/utils/src \
@@ -38,12 +41,22 @@ hpl/sercom \
 examples \
 hpl/gclk \
 samd21c/armcc/Device/SAMD21B/Source/ARM \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0 \
 hpl/core
 
 # List the object files
 OBJS +=  \
 hal/src/hal_io.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/list.o \
+hpl/systick/hpl_systick.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/event_groups.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/croutine.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/stream_buffer.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang/heap_1.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/queue.o \
 hal/src/hal_pwm.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.o \
 hal/src/hal_delay.o \
 hpl/pm/hpl_pm.o \
 hpl/core/hpl_init.o \
@@ -54,24 +67,36 @@ hpl/dmac/hpl_dmac.o \
 hpl/sysctrl/hpl_sysctrl.o \
 hpl/gclk/hpl_gclk.o \
 hal/src/hal_init.o \
-main.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.o \
+rtos_start.o \
 samd21c/armcc/Device/SAMD21B/Source/system_samd21.o \
 examples/driver_examples.o \
 driver_init.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0/port.o \
 hal/src/hal_usart_async.o \
 hpl/sercom/hpl_sercom.o \
 hal/utils/src/utils_ringbuffer.o \
-hal/utils/src/utils_event.o \
+main.o \
 hal/src/hal_gpio.o \
+hal/utils/src/utils_event.o \
 hal/src/hal_sleep.o \
 samd21c/armcc/Device/SAMD21B/Source/ARM/startup_SAMD21.o \
 hpl/tcc/hpl_tcc.o \
 atmel_start.o \
-hal/src/hal_atomic.o
+hal/src/hal_atomic.o \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/tasks.o
 
 OBJS_AS_ARGS +=  \
 "hal/src/hal_io.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/list.o" \
+"hpl/systick/hpl_systick.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/event_groups.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/croutine.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/stream_buffer.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang/heap_1.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/queue.o" \
 "hal/src/hal_pwm.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.o" \
 "hal/src/hal_delay.o" \
 "hpl/pm/hpl_pm.o" \
 "hpl/core/hpl_init.o" \
@@ -82,49 +107,65 @@ OBJS_AS_ARGS +=  \
 "hpl/sysctrl/hpl_sysctrl.o" \
 "hpl/gclk/hpl_gclk.o" \
 "hal/src/hal_init.o" \
-"main.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.o" \
+"rtos_start.o" \
 "samd21c/armcc/Device/SAMD21B/Source/system_samd21.o" \
 "examples/driver_examples.o" \
 "driver_init.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0/port.o" \
 "hal/src/hal_usart_async.o" \
 "hpl/sercom/hpl_sercom.o" \
 "hal/utils/src/utils_ringbuffer.o" \
-"hal/utils/src/utils_event.o" \
+"main.o" \
 "hal/src/hal_gpio.o" \
+"hal/utils/src/utils_event.o" \
 "hal/src/hal_sleep.o" \
 "samd21c/armcc/Device/SAMD21B/Source/ARM/startup_SAMD21.o" \
 "hpl/tcc/hpl_tcc.o" \
 "atmel_start.o" \
-"hal/src/hal_atomic.o"
+"hal/src/hal_atomic.o" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/tasks.o"
 
 # List the dependency files
 DEPS := $(OBJS:%.o=%.d)
 
 DEPS_AS_ARGS +=  \
-"hal/src/hal_gpio.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/event_groups.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/croutine.d" \
+"hal/utils/src/utils_event.d" \
 "hal/src/hal_io.d" \
+"hpl/systick/hpl_systick.d" \
+"main.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.d" \
 "hal/src/hal_pwm.d" \
 "hpl/core/hpl_core_m0plus_base.d" \
 "hal/utils/src/utils_list.d" \
 "hpl/dmac/hpl_dmac.d" \
 "hal/utils/src/utils_assert.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/stream_buffer.d" \
 "hal/src/hal_delay.d" \
 "hpl/core/hpl_init.d" \
 "hpl/sysctrl/hpl_sysctrl.d" \
 "hpl/gclk/hpl_gclk.d" \
 "samd21c/armcc/Device/SAMD21B/Source/ARM/startup_SAMD21.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.d" \
 "hal/src/hal_init.d" \
 "driver_init.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang/heap_1.d" \
 "hal/src/hal_usart_async.d" \
-"main.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0/port.d" \
+"rtos_start.d" \
 "examples/driver_examples.d" \
 "samd21c/armcc/Device/SAMD21B/Source/system_samd21.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/list.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/queue.d" \
 "hal/src/hal_sleep.d" \
 "hal/utils/src/utils_ringbuffer.d" \
 "hpl/sercom/hpl_sercom.d" \
-"hal/utils/src/utils_event.d" \
+"hal/src/hal_gpio.d" \
 "hal/src/hal_atomic.d" \
 "hpl/pm/hpl_pm.d" \
+"thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/tasks.d" \
 "hpl/tcc/hpl_tcc.d" \
 "atmel_start.d"
 
@@ -162,7 +203,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Compiler
 	$(QUOTE)armcc$(QUOTE) --c99 -c -DDEBUG -O1 -g --apcs=interwork --split_sections --cpu Cortex-M0+ -D__SAMD21E16L__ \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/tcc" -I"../hri" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/systick" -I"../hpl/tcc" -I"../hri" -I"../" -I"../config" -I"../thirdparty/RTOS" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/include" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/module_config" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
 --depend "$@"  -o "$@" "$<"
 
 	@echo Finished building: $<
@@ -171,7 +212,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Assembler
 	$(QUOTE)armasm$(QUOTE) -g --apcs=interwork --cpu Cortex-M0+ --pd "D__SAMD21E16L__ SETA 1" \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/tcc" -I"../hri" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/systick" -I"../hpl/tcc" -I"../hri" -I"../" -I"../config" -I"../thirdparty/RTOS" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/include" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/module_config" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
 --depend "$(@:%.o=%.d)" -o "$@" "$<"
 
 	@echo Finished building: $<
@@ -180,7 +221,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Preprocessing Assembler
 	$(QUOTE)armcc$(QUOTE) --c99 -c -DDEBUG -O1 -g --apcs=interwork --split_sections --cpu Cortex-M0+ -D__SAMD21E16L__ \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/tcc" -I"../hri" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/sysctrl" -I"../hpl/systick" -I"../hpl/tcc" -I"../hri" -I"../" -I"../config" -I"../thirdparty/RTOS" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/include" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0" -I"../thirdparty/RTOS/freertos/FreeRTOSV10.0.0/module_config" -I"../" -I"../CMSIS/Core/Include" -I"../samd21c/include"  \
 --depend "$@"  -o "$@" "$<"
 
 	@echo Finished building: $<
